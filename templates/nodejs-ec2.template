@@ -1,0 +1,277 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "vpc5b380320": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "172.31.0.0/16",
+        "InstanceTenancy": "default",
+        "EnableDnsSupport": "true",
+        "EnableDnsHostnames": "true"
+      }
+    },
+    "subnet07f63529": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "172.31.80.0/20",
+        "AvailabilityZone": "us-east-1b",
+        "VpcId": {
+          "Ref": "vpc5b380320"
+        }
+      }
+    },
+    "igw1efdbb66": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+      }
+    },
+    "doptc760b9bc": {
+      "Type": "AWS::EC2::DHCPOptions",
+      "Properties": {
+        "DomainName": "ec2.internal",
+        "DomainNameServers": [
+          "AmazonProvidedDNS"
+        ]
+      }
+    },
+    "acl45ca513f": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc5b380320"
+        }
+      }
+    },
+    "rtb65866e1a": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc5b380320"
+        }
+      }
+    },
+    "instancei0196a516e2f7fc6f9": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "DisableApiTermination": "false",
+        "InstanceInitiatedShutdownBehavior": "stop",
+        "IamInstanceProfile": "arn:aws:iam::487676984512:instance-profile/ec2-admin",
+        "ImageId": "ami-47d7752c",
+        "InstanceType": "t2.micro",
+        "KeyName": "dev-pair",
+        "Monitoring": "false",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "NodeJS"
+          }
+        ],
+        "NetworkInterfaces": [
+          {
+            "DeleteOnTermination": "true",
+            "DeviceIndex": 0,
+            "SubnetId": {
+              "Ref": "subnet07f63529"
+            },
+            "PrivateIpAddresses": [
+              {
+                "PrivateIpAddress": "172.31.94.26",
+                "Primary": "true"
+              }
+            ],
+            "GroupSet": [
+              {
+                "Ref": "sgWebServerSG"
+              }
+            ],
+            "AssociatePublicIpAddress": "true"
+          }
+        ]
+      }
+    },
+    "sgWebServerSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Web Server Security Group for EC2 Service.",
+        "VpcId": {
+          "Ref": "vpc5b380320"
+        }
+      }
+    },
+    "acl3": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "CidrBlock": "0.0.0.0/0",
+        "Egress": "true",
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "100",
+        "NetworkAclId": {
+          "Ref": "acl45ca513f"
+        }
+      }
+    },
+    "acl4": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "CidrBlock": "0.0.0.0/0",
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "RuleNumber": "100",
+        "NetworkAclId": {
+          "Ref": "acl45ca513f"
+        }
+      }
+    },
+    "subnetacl7": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "acl45ca513f"
+        },
+        "SubnetId": "subnet-eed21b89"
+      }
+    },
+    "subnetacl8": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "acl45ca513f"
+        },
+        "SubnetId": "subnet-31c6076d"
+      }
+    },
+    "subnetacl9": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "acl45ca513f"
+        },
+        "SubnetId": "subnet-19a03716"
+      }
+    },
+    "subnetacl10": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "acl45ca513f"
+        },
+        "SubnetId": {
+          "Ref": "subnet07f63529"
+        }
+      }
+    },
+    "subnetacl11": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "acl45ca513f"
+        },
+        "SubnetId": "subnet-60b6a85f"
+      }
+    },
+    "subnetacl12": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "acl45ca513f"
+        },
+        "SubnetId": "subnet-8b0590c1"
+      }
+    },
+    "gw2": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc5b380320"
+        },
+        "InternetGatewayId": {
+          "Ref": "igw1efdbb66"
+        }
+      }
+    },
+    "route2": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "RouteTableId": {
+          "Ref": "rtb65866e1a"
+        },
+        "GatewayId": {
+          "Ref": "igw1efdbb66"
+        }
+      },
+      "DependsOn": "gw2"
+    },
+    "dchpassoc2": {
+      "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
+      "Properties": {
+        "VpcId": {
+          "Ref": "vpc5b380320"
+        },
+        "DhcpOptionsId": {
+          "Ref": "doptc760b9bc"
+        }
+      }
+    },
+    "ingress5": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgWebServerSG"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": "80",
+        "ToPort": "80",
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "ingress6": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgWebServerSG"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": "8080",
+        "ToPort": "8080",
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "ingress7": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgWebServerSG"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": "22",
+        "ToPort": "22",
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "ingress8": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgWebServerSG"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": "443",
+        "ToPort": "443",
+        "CidrIp": "0.0.0.0/0"
+      }
+    },
+    "egress2": {
+      "Type": "AWS::EC2::SecurityGroupEgress",
+      "Properties": {
+        "GroupId": {
+          "Ref": "sgWebServerSG"
+        },
+        "IpProtocol": "-1",
+        "CidrIp": "0.0.0.0/0"
+      }
+    }
+  },
+  "Description": "BackSpace Academy NodeJS Application Server."
+}
