@@ -1,3 +1,6 @@
 [submodule "apps\\sample-go\\"]
 	path = apps\\sample-go\\
 	url = git@github.com:sampalm/AWSinAction.git
+[submodule "apps/sample-nodejs\\"]
+	path = apps/sample-nodejs\\
+	url = git@github.com:sampalm/AWSinAction.git
