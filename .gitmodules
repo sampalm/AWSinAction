@@ -4,3 +4,9 @@
 [submodule "apps/sample-nodejs\\"]
 	path = apps/sample-nodejs\\
 	url = git@github.com:sampalm/AWSinAction.git
+[submodule "apps\\sample-nodejs-dynamodb\\"]
+	path = apps\\sample-nodejs-dynamodb\\
+	url = git@github.com:sampalm/AWSinAction.git
+[submodule "apps\\sample-nodejs-cognito\\"]
+	path = apps\\sample-nodejs-cognito\\
+	url = https://github.com/sampalm/AWSinAction
