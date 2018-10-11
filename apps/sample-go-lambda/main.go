@@ -11,7 +11,7 @@ type Event struct {
 }
 
 func handler(e Event) (string, error) {
-	return fmt.Sprintf("Hello %s from the AWS Lambda GO", e.Username), nil
+	return fmt.Sprintf("<h1>Hello %s,</h1><h3>from the AWS Lambda GO</h3>", e.Username), nil
 }
 
 func main() {
