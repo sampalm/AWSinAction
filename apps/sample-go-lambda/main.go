@@ -1,3 +1,7 @@
+/**
+AWS LAMBDA COMMAND:
+aws lambda invoke --function-name questionresponse --payload file://payload.txt outfile
+*/
 package main
 
 import (
